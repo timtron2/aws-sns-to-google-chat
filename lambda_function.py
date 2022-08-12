@@ -1,27 +1,18 @@
 import json
 import logging
-from botocore.vendored import requests
-# from pygelf import GelfUdpHandler
+import os
+import urllib3
+from http.client import responses
 
 
 """
-Set your envs in lambda envinroment:
-- GOOGLE_WEBHOOK_URL
-- GRAYLOG_URL
-- GRAYLOG_PORT
-- GRAYLOG_TAG
+Set GOOGLE_WEBHOOK_URL in lambda envinroment:
 """
 
 
-# logging.getLogger().addHandler(GelfUdpHandler(
-#     host=os.environ['GRAYLOG_URL'],
-#   port=os.environ['GRAYLOG_PORT'],
-#    include_extra_fields=True,
-#    _facility='_facility',
-#    tag=os.environ['GRAYLOG_TAG']
-#))
 
 google_chat_url = os.environ['GOOGLE_WEBHOOK_URL']
+http = urllib3.PoolManager()
 
 
 def lambda_handler(event, context):
@@ -60,10 +51,9 @@ def get_text(message: dict) -> str:
 def send_to_chat(text: str, webhook_url: str):
     message = {'text': text}
     headers = {'Content-Type': 'application/json; charset=UTF-8'}
-    response = requests.post(url=webhook_url, headers=headers, data=json.dumps(message))
+    response = http.request('POST', url=webhook_url, headers=headers, body=json.dumps(message))
 
-    if response.status_code != 200:
+    if response.status != 200:
         return False
 
     return True
-
