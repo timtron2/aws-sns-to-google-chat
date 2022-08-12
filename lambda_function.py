@@ -1,7 +1,7 @@
 import json
 import logging
 from botocore.vendored import requests
-from pygelf import GelfUdpHandler
+# from pygelf import GelfUdpHandler
 
 
 """
@@ -13,13 +13,14 @@ Set your envs in lambda envinroment:
 """
 
 
-logging.getLogger().addHandler(GelfUdpHandler(
-    host=os.environ['GRAYLOG_URL'],
-    port=os.environ['GRAYLOG_PORT'],
-    include_extra_fields=True,
-    _facility='_facility',
-    tag=os.environ['GRAYLOG_TAG']
-))
+# logging.getLogger().addHandler(GelfUdpHandler(
+#     host=os.environ['GRAYLOG_URL'],
+#   port=os.environ['GRAYLOG_PORT'],
+#    include_extra_fields=True,
+#    _facility='_facility',
+#    tag=os.environ['GRAYLOG_TAG']
+#))
+
 google_chat_url = os.environ['GOOGLE_WEBHOOK_URL']
 
 
